@@ -17,26 +17,6 @@ This sub script (inqServices.rb) will eventually form the basis for Inquest's en
 
 Basic threading is implemented to run scans for each host in parallel, and the entire function is wrapped so multiple hosts (upto 10 currently), may be scanned at any one given time.  Increasing the threads > 2 is not really reccomended for any hosts accessed over the internet or via a VPN.
 
-Specific details
-----------------
-
-For reference, the following scans are performed for each host:
-
-    Initial TCP Discovery:
-        nmap -v -sS -F <host>
-
-    UDP Discovery:
-        nmap -v -sU -sV --version-all <host>
-        
-    All TCP Ports Discovery:
-        nmap -v -sS -p - <host>
-
-    Initial TCP Comprehensive:
-        nmap -v -sS -A --version-all -p [discovered ports] --script=default,discovery,safe,vuln <host>
-
-    All TCP Ports Comprehensive:
-        nmap -v -sS -A --version-all -p [discovered ports] --script=default,discovery,safe,vuln <host>
-
 Installation
 ------------
 
@@ -56,3 +36,22 @@ Usage
             --no-colour                  Removes colourisation from the ourput
         -h, --help                       Display this screen
 
+Specific details
+----------------
+
+For reference, the following scans are performed for each host:
+
+    Initial TCP Discovery:
+        nmap -v -sS -F <host>
+
+    UDP Discovery:
+        nmap -v -sU -sV --version-all <host>
+        
+    All TCP Ports Discovery:
+        nmap -v -sS -p - <host>
+
+    Initial TCP Comprehensive:
+        nmap -v -sS -A --version-all -p [discovered ports] --script=default,discovery,safe,vuln <host>
+
+    All TCP Ports Comprehensive:
+        nmap -v -sS -A --version-all -p [discovered ports] --script=default,discovery,safe,vuln <host>
