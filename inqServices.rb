@@ -225,7 +225,7 @@ class NmapScan
     statsEvery = 300
     puts "Commencing #{@scanType[scanTypeNum]} scan against [#{@input}]".notification
     output = @scanLocation[@scanType[scanTypeNum]]
-    options = ["-sS", "-F"]
+    options = ["-sS", "-F", "--disable-arp-ping"]
     options = options.join(" ")  
     
     system("nmap #{options} -v --stats-every #{statsEvery} -oA #{output} #{@input} > #{output}.log")
@@ -238,7 +238,7 @@ class NmapScan
     statsEvery = 300
     puts "Commencing #{@scanType[scanTypeNum]} scan against [#{@input}]".notification
     output = @scanLocation[@scanType[scanTypeNum]]
-    options = ["-sU", "-sV", "--version-all"]
+    options = ["-sU", "-sV", "--version-all", "--disable-arp-ping"]
     options = options.join(" ")  
     
     system("nmap #{options} -v --stats-every #{statsEvery} -oA #{output} #{@input} > #{output}.log")
@@ -251,7 +251,7 @@ class NmapScan
     statsEvery = 300
     puts "Commencing #{@scanType[scanTypeNum]} scan against [#{@input}]".notification
     output = @scanLocation[@scanType[scanTypeNum]]
-    options = ["-sS", "-p -"]
+    options = ["-sS", "-p -", "--disable-arp-ping"]
     options = options.join(" ")  
     
     system("nmap #{options} -v --stats-every #{statsEvery} -oA #{output} #{@input} > #{output}.log")
@@ -281,7 +281,7 @@ class NmapScan
 
     # Configure and perform the scan  
     puts "Commencing #{@scanType[scanTypeNum]} scan against [#{@input}]".notification
-    options = ["-sS", "-A", "--version-all","-p #{discoveredPorts}", "--script=default,discovery,safe,vuln"]
+    options = ["-sS", "-A", "--version-all","-p #{discoveredPorts}", "--script=default,discovery,safe,vuln", "--disable-arp-ping"]
     options = options.join(" ")
     
     system("nmap #{options} -v --stats-every #{statsEvery} -oA #{output} #{@input} > #{output}.log")
@@ -310,7 +310,7 @@ class NmapScan
     discoveredPorts = ports.join(",")
 
     puts "Commencing #{@scanType[scanTypeNum]} scan against [#{@input}]".notification
-    options = ["-sS", "-A", "--version-all","-p #{discoveredPorts}", "--script=default,discovery,safe,vuln"]
+    options = ["-sS", "-A", "--version-all","-p #{discoveredPorts}", "--script=default,discovery,safe,vuln", "--disable-arp-ping"]
     options = options.join(" ")  
     
     system("nmap #{options} -v --stats-every #{statsEvery} -oA #{output} #{@input} > #{output}.log")
