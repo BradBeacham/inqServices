@@ -66,6 +66,11 @@ optparse = OptionParser.new do|opts|
     $options[:inputList] = File.absolute_path(file)
   end
 
+  $options[:noPing] = false
+  opts.on( '--no-ping', 'Disables host discovery.  Adds the -Pn flag to all nmae scans' ) do
+    $options[:noPing] = true
+  end
+
   $options[:threads] = 1
   opts.on( '-t [1-10]', '--threads [1-10]',Integer, 'Specify the number of concurrent scans to perform') do|int|
     if int > 0 && int < 11
@@ -201,8 +206,9 @@ class NmapScan
     else
       @inputAlt = input
     end
-    
-    @baseDir = "#{$directory}/#{@inputAlt}"
+
+    # Prefix the name of the script and set the fully qualified directory location
+    @baseDir = "#{$directory}/inqServices_#{@inputAlt}"
     @scanType = ["initialTCP", "initialUDP", "allPortsTCP", "initialTCP_Comprehensive", "allPortsTCP_Comprehensive"]
     @scanLocation = Hash.new
 
@@ -225,7 +231,11 @@ class NmapScan
     statsEvery = 300
     puts "Commencing #{@scanType[scanTypeNum]} scan against [#{@input}]".notification
     output = @scanLocation[@scanType[scanTypeNum]]
-    options = ["-sS", "-F"]
+    options = ["-sS", "-F", "--disable-arp-ping"]
+    # Check to see if the disable host discover flag is enabled
+    if $options[:noPing]
+      options.insert(0, "-Pn")
+    end    
     options = options.join(" ")  
     
     system("nmap #{options} -v --stats-every #{statsEvery} -oA #{output} #{@input} > #{output}.log")
@@ -238,7 +248,11 @@ class NmapScan
     statsEvery = 300
     puts "Commencing #{@scanType[scanTypeNum]} scan against [#{@input}]".notification
     output = @scanLocation[@scanType[scanTypeNum]]
-    options = ["-sU", "-sV", "--version-all"]
+    options = ["-sU", "-sV", "--version-all", "--disable-arp-ping"]
+    # Check to see if the disable host discover flag is enabled
+    if $options[:noPing]
+      options.insert(0, "-Pn")
+    end    
     options = options.join(" ")  
     
     system("nmap #{options} -v --stats-every #{statsEvery} -oA #{output} #{@input} > #{output}.log")
@@ -251,7 +265,11 @@ class NmapScan
     statsEvery = 300
     puts "Commencing #{@scanType[scanTypeNum]} scan against [#{@input}]".notification
     output = @scanLocation[@scanType[scanTypeNum]]
-    options = ["-sS", "-p -"]
+    options = ["-sS", "-p -", "--disable-arp-ping"]
+    # Check to see if the disable host discover flag is enabled
+    if $options[:noPing]
+      options.insert(0, "-Pn")
+    end    
     options = options.join(" ")  
     
     system("nmap #{options} -v --stats-every #{statsEvery} -oA #{output} #{@input} > #{output}.log")
@@ -281,7 +299,11 @@ class NmapScan
 
     # Configure and perform the scan  
     puts "Commencing #{@scanType[scanTypeNum]} scan against [#{@input}]".notification
-    options = ["-sS", "-A", "--version-all","-p #{discoveredPorts}", "--script=default,discovery,safe,vuln"]
+    options = ["-sS", "-A", "--version-all","-p #{discoveredPorts}", "--disable-arp-ping"]
+    # Check to see if the disable host discover flag is enabled
+    if $options[:noPing]
+      options.insert(0, "-Pn")
+    end    
     options = options.join(" ")
     
     system("nmap #{options} -v --stats-every #{statsEvery} -oA #{output} #{@input} > #{output}.log")
@@ -310,7 +332,11 @@ class NmapScan
     discoveredPorts = ports.join(",")
 
     puts "Commencing #{@scanType[scanTypeNum]} scan against [#{@input}]".notification
-    options = ["-sS", "-A", "--version-all","-p #{discoveredPorts}", "--script=default,discovery,safe,vuln"]
+    options = ["-sS", "-A", "--version-all","-p #{discoveredPorts}", "--script=default,discovery,safe,vuln", "--disable-arp-ping"]
+    # Check to see if the disable host discover flag is enabled
+    if $options[:noPing]
+      options.insert(0, "-Pn")
+    end    
     options = options.join(" ")  
     
     system("nmap #{options} -v --stats-every #{statsEvery} -oA #{output} #{@input} > #{output}.log")
